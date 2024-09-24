@@ -2,13 +2,35 @@ import { Backdrop, Box, Grid2, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import ModalForm from "./Components/ModalForm";
+import { InputState } from "../../types";
+import TaxForm from "./Components/TaxForm";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 interface Props {
   open: boolean;
   onClose: () => void;
 }
 
+const initialState: InputState = {
+  name: "",
+  surname: "",
+  inn: "",
+  taxMode: "simple",
+  income: 0,
+};
+
 const Modal: React.FC<Props> = ({ open, onClose }) => {
+  const [data, setData] = useState<InputState>({
+    name: "",
+    surname: "",
+    inn: "",
+    taxMode: "simple",
+    income: 0,
+  });
+
+
+  const [taxModalOpen, setTaxModalOpen] = useState<boolean>(false);
+
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
   const [touchEndY, setTouchEndY] = useState<number | null>(null);
   const [modalTranslateY, setModalTranslateY] = useState(100);
@@ -20,6 +42,17 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
       setModalTranslateY(600);
     }
   }, [open]);
+
+  const setUserData = (data: InputState) => {
+    setData(data);
+    setTaxModalOpen(true);
+  };
+
+  const handleClose = () => {
+    onClose();
+    setTaxModalOpen(false);
+    setData(initialState);
+  };
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStartY(e.touches[0].clientY);
@@ -43,7 +76,7 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
       const touchDifference = touchEndY - touchStartY;
 
       if (touchDifference > 200) {
-        onClose();
+        handleClose();
       } else {
         setModalTranslateY(0);
       }
@@ -58,7 +91,7 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
   };
 
   return (
-    <Backdrop open={open} onClick={onClose}>
+    <Backdrop open={open} onClick={handleClose}>
       <Grid2
         container
         spacing={0}
@@ -66,42 +99,46 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
         wrap="nowrap"
         onClick={handleModalClick}
         sx={{
-          height: "90vh",
+          height: taxModalOpen ? "100vh" : "90vh",
           width: "100%",
           position: "absolute",
           bottom: 0,
           background: "white",
           p: 2,
           pt: 0,
-          borderTopLeftRadius: "20px",
-          borderTopRightRadius: "20px",
           overflowY: "auto",
           transform: `translateY(${modalTranslateY}px)`,
           transition: "transform 0.3s ease-out",
+          ...(!taxModalOpen && {
+            borderTopLeftRadius: "20px",
+            borderTopRightRadius: "20px",
+          }),
         }}
       >
-        <Box
-          sx={{
-            display: "block",
-            width: "100%",
-            py: 2,
-          }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
+        {!taxModalOpen && (
           <Box
             sx={{
               display: "block",
-              mx: "auto",
-              width: "20%",
-              height: "10px",
-              bgcolor: "lightgray",
-              borderRadius: "5px",
-              cursor: "pointer",
+              width: "100%",
+              py: 2,
             }}
-          ></Box>
-        </Box>
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <Box
+              sx={{
+                display: "block",
+                mx: "auto",
+                width: "20%",
+                height: "10px",
+                bgcolor: "lightgray",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }}
+            ></Box>
+          </Box>
+        )}
         <Grid2
           sx={{
             display: "flex",
@@ -110,19 +147,33 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
             mb: 4,
           }}
         >
+          {taxModalOpen && (
+            <ArrowBackIosIcon
+              sx={{ cursor: "pointer", fontSize: "50px" }}
+              onClick={handleClose}
+            />
+          )}
           <Typography variant={"h6"}>Заплатить налоги за ИП</Typography>
-          <CloseIcon
-            sx={{ cursor: "pointer", fontSize: "50px" }}
-            onClick={onClose}
-          />
+          {!taxModalOpen && (
+            <CloseIcon
+              sx={{ cursor: "pointer", fontSize: "50px" }}
+              onClick={handleClose}
+            />
+          )}
         </Grid2>
-        <Grid2 sx={{ mb: 4 }}>
-          <Typography variant="body1">
-            Теперь ИП на упрощенке обязан уплачивать за себя ИПН и социальный
-            налог. В связи с этими изменениями ИП должен платить за себя:
-          </Typography>
-        </Grid2>
-        <ModalForm />
+        {!taxModalOpen && (
+          <Grid2 sx={{ mb: 4 }}>
+            <Typography variant="body1">
+              Теперь ИП на упрощенке обязан уплачивать за себя ИПН и социальный
+              налог. В связи с этими изменениями ИП должен платить за себя:
+            </Typography>
+          </Grid2>
+        )}
+        {taxModalOpen ? (
+          <TaxForm data={data} />
+        ) : (
+          <ModalForm onSubmit={setUserData} />
+        )}
       </Grid2>
     </Backdrop>
   );

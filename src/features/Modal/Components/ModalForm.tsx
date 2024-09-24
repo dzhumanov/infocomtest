@@ -2,7 +2,11 @@ import { Button, Grid2, MenuItem, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { InputState } from "../../../types";
 
-const ModalForm = () => {
+interface Props {
+  onSubmit: (data: InputState) => void;
+}
+
+const ModalForm: React.FC<Props> = ({ onSubmit }) => {
   const [state, setState] = useState<InputState>({
     name: "",
     surname: "",
@@ -21,12 +25,12 @@ const ModalForm = () => {
     }
 
     if (name === "income" && value.length > 9) {
-        return;
-      }
+      return;
+    }
 
     setState((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: name === "income" ? parseFloat(value) : value,
     }));
   };
 
@@ -35,17 +39,19 @@ const ModalForm = () => {
 
     if (state.inn.length !== 12) {
       setInnError("ИНН должен содержать 12 цифр");
+      return;
     } else {
       setInnError("");
     }
 
     if (state.income <= 0 || state.income > 150000000) {
       setIncomeError("Доход не может быть равен нулю и не больше 150 000 000");
+      return;
     } else {
       setIncomeError("");
     }
 
-    console.log(state);
+    onSubmit(state);
   };
 
   return (
