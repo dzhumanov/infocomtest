@@ -3,5 +3,5 @@ export interface InputState {
   surname: string;
   inn: string;
   taxMode: "simple" | "general";
-  income: number | "";
+  income: number;
 }
