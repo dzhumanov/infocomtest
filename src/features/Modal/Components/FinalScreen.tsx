@@ -14,7 +14,8 @@ const FinalScreen: React.FC<Props> = ({ data, taxes, onClose }) => {
     <Grid2
       container
       direction={"column"}
-      sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+      wrap="nowrap"
+      sx={{ display: "flex", flexDirection: "column", height: "100%", overflowY: "auto" }}
     >
       <Grid2 sx={{ mb: "80px" }}>
         <Typography
