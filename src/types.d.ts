@@ -6,10 +6,10 @@ export interface InputState {
   income: number;
 }
 
-export interface Taxes {
-  ipn: { name: string; checked: boolean; procent: number };
-  co: { name: string; checked: boolean; procent: number };
-  opv: { name: string; checked: boolean; procent: number };
-  vosms: { name: string; checked: boolean; procent: number };
-}
 
+export interface Tax {
+  name: string;
+  displayName: string;
+  checked: boolean;
+  procent: number;
+}

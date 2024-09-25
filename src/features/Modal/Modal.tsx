@@ -2,9 +2,10 @@ import { Backdrop, Box, Grid2, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import ModalForm from "./Components/ModalForm";
-import { InputState } from "../../types";
+import { InputState, Tax } from "../../types";
 import TaxForm from "./Components/TaxForm";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import FinalScreen from "./Components/FinalScreen";
 
 interface Props {
   open: boolean;
@@ -28,8 +29,10 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
     income: 0,
   });
 
+  const [taxes, setTaxes] = useState<Tax[]>([]);
 
   const [taxModalOpen, setTaxModalOpen] = useState<boolean>(false);
+  const [finalScreenOpen, setFinalScreenOpen] = useState<boolean>(false);
 
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
   const [touchEndY, setTouchEndY] = useState<number | null>(null);
@@ -48,10 +51,18 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
     setTaxModalOpen(true);
   };
 
+  const setTaxesData = (data: Tax[]) => {
+    setTaxes(data);
+    setTaxModalOpen(false);
+    setFinalScreenOpen(true);
+  };
+
   const handleClose = () => {
     onClose();
     setTaxModalOpen(false);
+    setFinalScreenOpen(false);
     setData(initialState);
+    setTaxes([]);
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -153,7 +164,9 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
               onClick={handleClose}
             />
           )}
-          <Typography variant={"h6"}>Заплатить налоги за ИП</Typography>
+          {!finalScreenOpen && (
+            <Typography variant={"h6"}>Заплатить налоги за ИП</Typography>
+          )}
           {!taxModalOpen && (
             <CloseIcon
               sx={{ cursor: "pointer", fontSize: "50px" }}
@@ -161,7 +174,7 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
             />
           )}
         </Grid2>
-        {!taxModalOpen && (
+        {!taxModalOpen && !finalScreenOpen && (
           <Grid2 sx={{ mb: 4 }}>
             <Typography variant="body1">
               Теперь ИП на упрощенке обязан уплачивать за себя ИПН и социальный
@@ -170,7 +183,9 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
           </Grid2>
         )}
         {taxModalOpen ? (
-          <TaxForm data={data} />
+          <TaxForm data={data} setTaxesData={setTaxesData} />
+        ) : finalScreenOpen ? (
+          <FinalScreen data={data} taxes={taxes} onClose={handleClose} />
         ) : (
           <ModalForm onSubmit={setUserData} />
         )}

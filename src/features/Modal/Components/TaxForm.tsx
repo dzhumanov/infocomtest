@@ -1,31 +1,31 @@
 import React, { useState } from "react";
-import { InputState, Taxes } from "../../../types";
+import { InputState, Tax } from "../../../types";
 import { Button, Grid2, Typography } from "@mui/material";
 import TaxCard from "./TaxCard";
 
 interface Props {
   data: InputState;
+  setTaxesData: (data: Tax[]) => void;
 }
 
-const TaxForm: React.FC<Props> = ({ data }) => {
-  const [taxes, setTaxes] = useState<Taxes>({
-    ipn: { name: "ИПН", checked: false, procent: 3 },
-    co: { name: "СО", checked: false, procent: 3.5 },
-    opv: { name: "ОПВ", checked: false, procent: 10 },
-    vosms: { name: "ВОСМС", checked: false, procent: 5 },
-  });
+const TaxForm: React.FC<Props> = ({ data, setTaxesData }) => {
+  const [taxes, setTaxes] = useState<Tax[]>([
+    { name: "ipn", displayName: "ИПН", checked: false, procent: 3 },
+    { name: "co", displayName: "СО", checked: false, procent: 3.5 },
+    { name: "opv", displayName: "ОПВ", checked: false, procent: 10 },
+    { name: "vosms", displayName: "ВОСМС", checked: false, procent: 5 },
+  ]);
 
   const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
 
-    setTaxes((prevState) => ({
-      ...prevState,
-      [name as keyof Taxes]: { ...prevState[name as keyof Taxes], checked },
-    }));
+    setTaxes((prevState) =>
+      prevState.map((tax) => (tax.name === name ? { ...tax, checked } : tax))
+    );
   };
 
   const calculateTotalTax = () => {
-    const totalTax = Object.values(taxes).reduce(
+    const totalTax = taxes.reduce(
       (acc, tax) => acc + (tax.checked ? tax.procent : 0),
       0
     );
@@ -35,11 +35,12 @@ const TaxForm: React.FC<Props> = ({ data }) => {
   const onFormSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    const checkedTaxes = Object.values(taxes).some((tax) => tax.checked);
-    if (!checkedTaxes) {
+    const checkedTaxes = taxes.filter((tax) => tax.checked);
+    if (checkedTaxes.length < 1) {
       alert("Выберите хотя бы один налог!");
       return;
     }
+    setTaxesData(checkedTaxes);
   };
 
   return (
@@ -50,14 +51,14 @@ const TaxForm: React.FC<Props> = ({ data }) => {
       </Grid2>
 
       <Grid2 container direction="column" spacing={2}>
-        {Object.keys(taxes).map((key) => (
+        {taxes.map((tax) => (
           <TaxCard
-            key={key}
-            name={key}
-            displayName={taxes[key as keyof Taxes].name}
-            checked={taxes[key as keyof Taxes].checked}
+            key={tax.name}
+            name={tax.name}
+            displayName={tax.displayName}
+            checked={tax.checked}
             income={data.income}
-            procent={taxes[key as keyof Taxes].procent}
+            procent={tax.procent}
             handleCheckBox={handleCheckbox}
           />
         ))}
