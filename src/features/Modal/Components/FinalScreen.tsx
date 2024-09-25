@@ -1,6 +1,7 @@
 import { Button, Grid2, Typography } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { InputState, Tax } from "../../../types";
+import { calculateTotalTax } from "../../../helpers/functions";
 
 interface Props {
   data: InputState;
@@ -9,13 +10,6 @@ interface Props {
 }
 
 const FinalScreen: React.FC<Props> = ({ data, taxes, onClose }) => {
-  const calculateTotalTax = () => {
-    const totalTax = taxes.reduce(
-      (acc, tax) => acc + (tax.checked ? tax.procent : 0),
-      0
-    );
-    return (totalTax * data.income) / 100;
-  };
   return (
     <Grid2
       container
@@ -83,7 +77,7 @@ const FinalScreen: React.FC<Props> = ({ data, taxes, onClose }) => {
             Ваш доход за пол года
           </Typography>
           <Typography variant="body1" fontStyle={"italic"}>
-            {data.income}
+            {data.income} СОМ
           </Typography>
         </Grid2>
         {taxes.map((tax) => (
@@ -115,7 +109,7 @@ const FinalScreen: React.FC<Props> = ({ data, taxes, onClose }) => {
             Итого оплачено за полугодие:
           </Typography>
           <Typography variant="body1" fontStyle={"italic"}>
-            {calculateTotalTax().toFixed()} СОМ
+            {calculateTotalTax(taxes, data.income)} СОМ
           </Typography>
         </Grid2>
       </Grid2>
@@ -124,7 +118,7 @@ const FinalScreen: React.FC<Props> = ({ data, taxes, onClose }) => {
           fullWidth
           variant="text"
           sx={{
-            color:"black",
+            color: "black",
             fontStyle: "italic",
             fontSize: "20px",
             textTransform: "none",

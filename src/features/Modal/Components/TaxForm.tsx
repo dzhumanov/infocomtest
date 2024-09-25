@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { InputState, Tax } from "../../../types";
 import { Box, Button, Grid2, Typography } from "@mui/material";
 import TaxCard from "./TaxCard";
+import { calculateTotalTax } from "../../../helpers/functions";
 
 interface Props {
   data: InputState;
@@ -22,14 +23,6 @@ const TaxForm: React.FC<Props> = ({ data, setTaxesData }) => {
     setTaxes((prevState) =>
       prevState.map((tax) => (tax.name === name ? { ...tax, checked } : tax))
     );
-  };
-
-  const calculateTotalTax = () => {
-    const totalTax = taxes.reduce(
-      (acc, tax) => acc + (tax.checked ? tax.procent : 0),
-      0
-    );
-    return (totalTax * data.income) / 100;
   };
 
   const onFormSubmit = (e: React.MouseEvent) => {
@@ -99,8 +92,7 @@ const TaxForm: React.FC<Props> = ({ data, setTaxesData }) => {
             Итого к оплате за полугодие:
           </Typography>
           <Typography variant="h5" fontStyle={"italic"}>
-            {calculateTotalTax()
-              .toFixed()
+            {calculateTotalTax(taxes, data.income)
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, " ")}{" "}
             СОМ

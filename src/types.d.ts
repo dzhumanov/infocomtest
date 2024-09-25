@@ -6,7 +6,6 @@ export interface InputState {
   income: number;
 }
 
-
 export interface Tax {
   name: string;
   displayName: string;

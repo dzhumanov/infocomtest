@@ -1,6 +1,8 @@
 import { Box, Checkbox, Grid2, Typography } from "@mui/material";
 import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 
 interface Props {
   name: string;
@@ -42,6 +44,10 @@ const TaxCard: React.FC<Props> = ({
           name={name.toLowerCase()}
           checked={checked}
           onChange={handleCheckBox}
+          icon={<PanoramaFishEyeIcon sx={{ fontSize: "30px" }} />}
+          checkedIcon={
+            <CheckCircleIcon sx={{ color: "black", fontSize: "30px" }} />
+          }
         />
         <Box>
           <Typography variant="h5" fontWeight={"bold"} textAlign={"right"}>
