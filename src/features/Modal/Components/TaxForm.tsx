@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { InputState, Tax } from "../../../types";
-import { Button, Grid2, Typography } from "@mui/material";
+import { Box, Button, Grid2, Typography } from "@mui/material";
 import TaxCard from "./TaxCard";
 
 interface Props {
@@ -44,10 +44,28 @@ const TaxForm: React.FC<Props> = ({ data, setTaxesData }) => {
   };
 
   return (
-    <Grid2 container direction="column" spacing={2}>
+    <Grid2
+      container
+      direction="column"
+      spacing={2}
+      wrap="nowrap"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+      }}
+    >
       <Grid2 container justifyContent="space-between" alignItems="center">
-        <Typography variant="h4">Ваш доход за полугодие:</Typography>
-        <Typography variant="h4">{data.income} СОМ</Typography>
+        <Typography
+          variant="h5"
+          fontStyle={"italic"}
+          sx={{ maxWidth: "180px" }}
+        >
+          Ваш доход за полугодие:
+        </Typography>
+        <Typography variant="h5" fontStyle={"italic"}>
+          {data.income.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} СОМ
+        </Typography>
       </Grid2>
 
       <Grid2 container direction="column" spacing={2}>
@@ -64,17 +82,43 @@ const TaxForm: React.FC<Props> = ({ data, setTaxesData }) => {
         ))}
       </Grid2>
 
-      <Grid2>
-        <Typography>Итого к оплате за полугодие:</Typography>
-        <Typography>{calculateTotalTax()} СОМ</Typography>
+      <Grid2
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          flexGrow: 1,
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography
+            variant="h5"
+            fontStyle={"italic"}
+            sx={{ maxWidth: "200px" }}
+          >
+            Итого к оплате за полугодие:
+          </Typography>
+          <Typography variant="h5" fontStyle={"italic"}>
+            {calculateTotalTax()
+              .toFixed()
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, " ")}{" "}
+            СОМ
+          </Typography>
+        </Box>
       </Grid2>
 
       <Grid2 sx={{ mt: 4 }}>
         <Button
           onClick={onFormSubmit}
-          type="submit"
           fullWidth
           variant="contained"
+          sx={{
+            bgcolor: "black",
+            fontStyle: "italic",
+            fontSize: "20px",
+            textTransform: "none",
+          }}
         >
           Оплатить
         </Button>

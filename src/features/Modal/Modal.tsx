@@ -110,7 +110,7 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
         wrap="nowrap"
         onClick={handleModalClick}
         sx={{
-          height: taxModalOpen ? "100vh" : "90vh",
+          height: taxModalOpen || finalScreenOpen ? "100vh" : "90vh",
           width: "100%",
           position: "absolute",
           bottom: 0,
@@ -120,10 +120,12 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
           overflowY: "auto",
           transform: `translateY(${modalTranslateY}px)`,
           transition: "transform 0.3s ease-out",
-          ...(!taxModalOpen && {
-            borderTopLeftRadius: "20px",
-            borderTopRightRadius: "20px",
-          }),
+          ...(!taxModalOpen
+            ? {}
+            : finalScreenOpen && {
+                borderTopLeftRadius: "20px",
+                borderTopRightRadius: "20px",
+              }),
         }}
       >
         {!taxModalOpen && (
@@ -154,8 +156,8 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            mb: 4,
+            justifyContent: taxModalOpen ? "flex-start" : "space-between",
+            mb: 2,
           }}
         >
           {taxModalOpen && (
@@ -165,16 +167,18 @@ const Modal: React.FC<Props> = ({ open, onClose }) => {
             />
           )}
           {!finalScreenOpen && (
-            <Typography variant={"h6"}>Заплатить налоги за ИП</Typography>
+            <Typography variant={"h6"} fontStyle={"italic"} fontSize={"24px"}>
+              Заплатить налоги за ИП
+            </Typography>
           )}
-          {!taxModalOpen && (
+          {!finalScreenOpen && !taxModalOpen && (
             <CloseIcon
               sx={{ cursor: "pointer", fontSize: "50px" }}
               onClick={handleClose}
             />
           )}
         </Grid2>
-        {!taxModalOpen && !finalScreenOpen && (
+        {!finalScreenOpen && !taxModalOpen && (
           <Grid2 sx={{ mb: 4 }}>
             <Typography variant="body1">
               Теперь ИП на упрощенке обязан уплачивать за себя ИПН и социальный

@@ -17,28 +17,60 @@ const FinalScreen: React.FC<Props> = ({ data, taxes, onClose }) => {
     return (totalTax * data.income) / 100;
   };
   return (
-    <Grid2 container direction={"column"}>
-      <Grid2>
-        <Typography variant="h5">Спасибо!</Typography>
-        <Typography variant="h5">Налоги успешно оплачены!</Typography>
-        <CheckCircleIcon />
+    <Grid2
+      container
+      direction={"column"}
+      sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+    >
+      <Grid2 sx={{ mb: "80px" }}>
+        <Typography
+          variant="h4"
+          fontStyle={"italic"}
+          sx={{ textAlign: "center" }}
+        >
+          Спасибо!
+        </Typography>
+        <Typography
+          variant="h4"
+          fontStyle={"italic"}
+          sx={{ textAlign: "center" }}
+        >
+          Налоги успешно оплачены!
+        </Typography>
+        <CheckCircleIcon
+          sx={{ fontSize: "60px", display: "block", mx: "auto" }}
+        />
       </Grid2>
-      <Grid2 container direction={"column"}>
+      <Grid2 container direction={"column"} spacing={1}>
         <Grid2 sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="body1">Имя</Typography>
-          <Typography variant="body1">{data.name}</Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
+            Имя
+          </Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
+            {data.name}
+          </Typography>
         </Grid2>
         <Grid2 sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="body1">Фамилия</Typography>
-          <Typography variant="body1">{data.surname}</Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
+            Фамилия
+          </Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
+            {data.surname}
+          </Typography>
         </Grid2>
         <Grid2 sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="body1">ИНН</Typography>
-          <Typography variant="body1">{data.inn}</Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
+            ИНН
+          </Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
+            {data.inn}
+          </Typography>
         </Grid2>
         <Grid2 sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="body1">Режим налогооблажения</Typography>
-          <Typography variant="body1">
+          <Typography variant="body1" fontStyle={"italic"}>
+            Режим налогооблажения
+          </Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
             {data.taxMode === "simple"
               ? "Упрощённый"
               : data.taxMode === "general"
@@ -47,29 +79,60 @@ const FinalScreen: React.FC<Props> = ({ data, taxes, onClose }) => {
           </Typography>
         </Grid2>
         <Grid2 sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="body1">Ваш доход за пол года</Typography>
-          <Typography variant="body1">{data.income}</Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
+            Ваш доход за пол года
+          </Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
+            {data.income}
+          </Typography>
         </Grid2>
         {taxes.map((tax) => (
           <Grid2
             key={tax.name}
             sx={{ display: "flex", justifyContent: "space-between" }}
           >
-            <Typography variant="body1">{tax.displayName}</Typography>
-            <Typography variant="body1">
+            <Typography variant="body1" fontStyle={"italic"}>
+              {tax.displayName}
+            </Typography>
+            <Typography variant="body1" fontStyle={"italic"}>
               {((data.income * tax.procent) / 100).toFixed()} СОМ
             </Typography>
           </Grid2>
         ))}
-        <Grid2>
-          <Typography variant="body1">Итого оплачено за полугодие:</Typography>
-          <Typography variant="h5">
+        <Grid2
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mt: "60px",
+            alignItems: "flex-end",
+          }}
+        >
+          <Typography
+            variant="body1"
+            fontStyle={"italic"}
+            sx={{ maxWidth: "120px" }}
+          >
+            Итого оплачено за полугодие:
+          </Typography>
+          <Typography variant="body1" fontStyle={"italic"}>
             {calculateTotalTax().toFixed()} СОМ
           </Typography>
         </Grid2>
-        <Grid2>
-            <Button variant="contained" onClick={onClose} sx={{display: "block"}}>На главную</Button>
-        </Grid2>
+      </Grid2>
+      <Grid2 sx={{ mt: "auto" }}>
+        <Button
+          fullWidth
+          variant="text"
+          sx={{
+            color:"black",
+            fontStyle: "italic",
+            fontSize: "20px",
+            textTransform: "none",
+          }}
+          onClick={onClose}
+        >
+          Вернуться на главную
+        </Button>
       </Grid2>
     </Grid2>
   );

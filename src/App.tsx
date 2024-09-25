@@ -23,7 +23,11 @@ const App = () => {
         alignItems: "center",
       }}
     >
-      <Button variant="contained" sx={{ display: "block" }} onClick={onOpen}>
+      <Button
+        variant="outlined"
+        sx={{ display: "block", fontStyle: "italic", color:"black", borderColor: "black", p: "16px", lineHeight: "24px", fontWeight: 400 }}
+        onClick={onOpen}
+      >
         Налоговый вычет
       </Button>
 

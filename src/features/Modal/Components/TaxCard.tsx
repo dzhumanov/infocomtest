@@ -1,5 +1,6 @@
 import { Box, Checkbox, Grid2, Typography } from "@mui/material";
 import React from "react";
+import InfoIcon from "@mui/icons-material/Info";
 
 interface Props {
   name: string;
@@ -23,7 +24,8 @@ const TaxCard: React.FC<Props> = ({
       sx={{
         minHeight: "70px",
         width: "100%",
-        p: 2,
+        px: 3,
+        py: 2,
         boxShadow: "-1px 10px 22px 0px rgba(0, 0, 0, 0.75)",
         borderRadius: "6px",
       }}
@@ -42,18 +44,31 @@ const TaxCard: React.FC<Props> = ({
           onChange={handleCheckBox}
         />
         <Box>
-          <Typography variant="body1" fontWeight={"bold"} textAlign={"right"}>
+          <Typography variant="h5" fontWeight={"bold"} textAlign={"right"}>
             {displayName}
           </Typography>
-          <Typography variant="body2" sx={{ color: "gray" }}>
+          <Typography variant="body2" sx={{ color: "#9D9D9D" }}>
             ({procent}% от дохода)
           </Typography>
         </Box>
       </Box>
       {checked && (
-        <Typography variant="body1" sx={{ fontWeight: "bold", mt: "30px" }}>
-          {((income * procent) / 100).toFixed(2)} СОМ
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "end",
+          }}
+        >
+          <Typography variant="h5" sx={{ fontWeight: "bold", mt: "30px" }}>
+            {((income * procent) / 100)
+              .toFixed()
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, " ")}{" "}
+            СОМ
+          </Typography>
+          <InfoIcon fontSize="large" />
+        </Box>
       )}
     </Grid2>
   );

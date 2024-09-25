@@ -56,37 +56,61 @@ const ModalForm: React.FC<Props> = ({ onSubmit }) => {
 
   return (
     <>
-      <form autoComplete="off" onSubmit={onFormSubmit}>
-        <Grid2 container spacing={2} sx={{ mb: 4 }}>
+      <form
+        autoComplete="off"
+        onSubmit={onFormSubmit}
+        style={{ display: "flex", flexDirection: "column", height: "100%" }}
+      >
+        <Grid2 container spacing={2} sx={{ mb: 2 }}>
           <Grid2 size={6}>
-            <Typography variant="body1" sx={{ mb: "10px" }}>
+            <Typography
+              variant="body1"
+              fontStyle={"italic"}
+              sx={{ mb: "10px" }}
+            >
               Имя
             </Typography>
             <TextField
+              fullWidth
               id="name"
               placeholder="Имя"
               value={state.name}
               onChange={inputChangeHandler}
               name="name"
               required
+              sx={{
+                "& .MuiOutlinedInput-input": {
+                  padding: "8px",
+                },
+              }}
             />
           </Grid2>
           <Grid2 size={6}>
-            <Typography variant="body1" sx={{ mb: "10px" }}>
+            <Typography
+              variant="body1"
+              fontStyle={"italic"}
+              sx={{ mb: "10px" }}
+            >
               Фамилия
             </Typography>
             <TextField
+              fullWidth
               id="surname"
               placeholder="Фамилия"
               value={state.surname}
               onChange={inputChangeHandler}
               name="surname"
               required
+              sx={{
+                "& .MuiOutlinedInput-input": {
+                  padding: "8px",
+                },
+              }}
             />
           </Grid2>
         </Grid2>
         <Grid2 sx={{ mb: 4 }}>
-          <Typography variant="body1" sx={{ mb: "10px" }}>
+          <Typography variant="body1" fontStyle={"italic"} sx={{ mb: "10px" }}>
             ИНН
           </Typography>
           <TextField
@@ -100,10 +124,15 @@ const ModalForm: React.FC<Props> = ({ onSubmit }) => {
             required
             error={!!innError}
             helperText={innError}
+            sx={{
+              "& .MuiOutlinedInput-input": {
+                padding: "8px",
+              },
+            }}
           />
         </Grid2>
         <Grid2 sx={{ mb: 4 }}>
-          <Typography variant="body1" sx={{ mb: "10px" }}>
+          <Typography variant="body1" fontStyle={"italic"} sx={{ mb: "10px" }}>
             Режим налогооблажения
           </Typography>
           <TextField
@@ -114,13 +143,18 @@ const ModalForm: React.FC<Props> = ({ onSubmit }) => {
             onChange={inputChangeHandler}
             name="taxMode"
             required
+            sx={{
+              "& .MuiOutlinedInput-input": {
+                padding: "8px",
+              },
+            }}
           >
             <MenuItem value="simple">Упрощённый</MenuItem>
             <MenuItem value="general">Общедоступный</MenuItem>
           </TextField>
         </Grid2>
         <Grid2>
-          <Typography variant="body1" sx={{ mb: "10px" }}>
+          <Typography variant="body1" fontStyle={"italic"} sx={{ mb: "10px" }}>
             Ваш доход за пол года
           </Typography>
           <TextField
@@ -134,10 +168,25 @@ const ModalForm: React.FC<Props> = ({ onSubmit }) => {
             required
             error={!!incomeError}
             helperText={incomeError}
+            sx={{
+              "& .MuiOutlinedInput-input": {
+                padding: "8px",
+              },
+            }}
           />
         </Grid2>
-        <Grid2 sx={{ mt: 4 }}>
-          <Button type="submit" fullWidth variant="contained">
+        <Grid2 sx={{ mt: "auto" }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              bgcolor: "black",
+              fontStyle: "italic",
+              fontSize: "20px",
+              textTransform: "none",
+            }}
+          >
             Рассчитать
           </Button>
         </Grid2>
